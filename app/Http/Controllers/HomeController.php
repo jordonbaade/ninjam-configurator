@@ -37,7 +37,14 @@ class HomeController extends Controller
     }
 
     public function backup() {
-        return \Storage::download(config('ninjam.path'));
+        $ninjamConfigPath = config('ninjam.path');
+        $ninjamConfigFileName = basename($ninjamConfigPath);
+        $backupFile = $ninjamConfigPath.'.backup';
+        \Storage::put(
+            $backupFile,
+            \Storage::get(config('ninjam.path'))
+        );
+        return \Storage::download($backupFile, $ninjamConfigFileName);
     }
 
     public function ninjam(Request $request) {
